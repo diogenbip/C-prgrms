@@ -60,10 +60,10 @@ public:
     }
     FloatMatrix operator*(const FloatMatrix& m)
     {
-        FloatMatrix c(m.count_columns,m.count_strings);
+        FloatMatrix c(m.count_columns, count_strings);
         for (size_t i = 0; i < count_strings; i++)
         {
-            for (size_t j = 0; j < count_columns; j++)
+            for (size_t j = 0; j < m.count_columns; j++)
             {
                 c.matrix[i][j] = 0;
                 for (size_t k = 0; k < count_columns; k++)
@@ -91,15 +91,11 @@ public:
     {
         for (size_t i = 0; i < count_strings; i++)
             for (size_t j = 0; j < count_columns; j++)
-                if (matrix[i][j] == m.matrix[i][j])
-                {
-                    return true;
-                }
-                else
+                if (matrix[i][j] != m.matrix[i][j])
                 {
                     return false;
                 }
-                   
+        return true;
 
     }
     bool operator!=(const FloatMatrix& m)
@@ -109,53 +105,49 @@ public:
                 if (matrix[i][j] != m.matrix[i][j])
                 {
                     return true;
-                }
-                else
-                {
-                    return false;
-                }
+                } 
+        return false;
 
 
     }
-    void Enter();
-    void Print();
+    friend istream& operator>>(istream& is, const FloatMatrix& m)
+    {
+        cout << "Enter elements of matrix" << endl;
+        for (size_t i = 0; i < m.count_strings; i++)
+            for (size_t j = 0; j < m.count_columns; j++)
+                is >> m.matrix[i][j];
+        cout << "the matrix was filled" << endl;
+        return is;
+        
+    }
+    friend ostream& operator<<(ostream& os, const FloatMatrix& m)
+    {
+        for (size_t i = 0; i < m.count_strings; i++)
+        {
+            
+            for (size_t j = 0; j < m.count_columns; j++)
+                os << m.matrix[i][j] << "  ";
+            os << "\t\n";
+        }
+        return os;
+
+    }
     void RandM();
-    void PowM(const int n,FloatMatrix &m);
+    void PowM(const int n);
 
 
     ~FloatMatrix()
     {
-        if (count_strings > 0)
-        {
-            for (int i = 0; i < count_columns; i++)
+        
+            for (int i = 0; i < count_strings; i++)
                 delete[]matrix[i];
-        }
-        if (count_columns > 0)
             delete[]matrix;
     }
 
 };
 
-void FloatMatrix::Enter()
-{
-    cout << "Enter elements of matrix" << endl;
-    for (size_t i = 0; i < count_strings; i++)
-        for (size_t j = 0; j < count_columns; j++)
-            cin >> matrix[i][j];
-    cout << "the matrix was filled" << endl;
-}
 
-void FloatMatrix::Print()
-{
-    for (size_t i = 0; i < count_strings; i++)
-    {
-        for (size_t j = 0; j < count_columns; j++)
-            cout << matrix[i][j] << "\t";
-        cout << endl;
-    }
-    cout << "---------------------" << endl << endl;
-       
-}
+
 
 void FloatMatrix::RandM()
 {
@@ -164,28 +156,39 @@ void FloatMatrix::RandM()
             matrix[i][j] = rand() % 10;
 }
 
-void FloatMatrix::PowM(const int n,FloatMatrix &m) {
-    FloatMatrix c=m;
-
+void FloatMatrix::PowM(const int n) {
+    if (count_columns != count_strings)
+    {
+        cout << "I'can't do it" << endl;
+        return;
+    }
+    else
+    {
+        FloatMatrix c = *this;
         for (int i = 1; i < n; i++)
         {
-            m = m * c;
+            *this = *this * c;
         }
+    }
+   
     
     
 }
 
 int main()
 {
-    FloatMatrix A(2,2), B(2,2),C(2,2);
+    FloatMatrix A(2,2), B(3,2),C(2,2);
 
     A.RandM();
-    //B.Enter();
-    A.Print();
-    B.Print();
-    A.PowM(5,A);
-    A.Print();
-    if (A != C)
-        cout << "a!=c" << endl;
+    B.RandM();
+    cout<<A<<endl;
+    cout << B << endl;
+
+    A = A * B;
+    cout << A << endl;
+    A.PowM(2);
+
+  //  if (A != C)
+   //     cout << "a!=c" << endl;
 }
 
