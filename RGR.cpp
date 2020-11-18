@@ -89,11 +89,51 @@ public:
             }
     Node* Begin() { return head; }
     Node* End() { return NULL; }
-    friend istream& operator>>(istream& is, NMSet& a)
+    NMSet Sorting( NMSet &a)
+    {
+        NMSet A ;
+        NMSet B ;
+        A = a;
+        NMSet::Iterator li(A.Begin());
+        int j = INT_MAX;
+        int ret_count = 1;
+        int tmp = 0;
+        while (true)
+        {
+            for (li; li != A.End(); li++)
             {
-                char c[80];
-                int dump = 0;
-                int val = 0;
+                if (*li < j&&tmp<*li)
+                {
+                    j = *li;
+                    ret_count = 1;
+                }
+                else if (*li == j)
+                {
+                    ret_count++;
+                }
+
+            }
+            for (; ret_count > 0; ret_count--)
+            {
+                B.push_back(j);
+            }
+            if (B.size == A.size)
+                break;
+            tmp = j;
+            j = INT_MAX;
+            li = A.Begin();
+
+                
+        }
+        return B;
+
+    }
+    friend istream& operator>>(istream& is, NMSet& a)
+    {
+        char c[80];
+        int dump = 0;
+        int val = 0;
+        int minval = INT_MAX;
                 is.getline(c,80);
                     for (int i = 0; c[i] != '\n'; i++)
                     {
@@ -137,6 +177,7 @@ public:
                         val = 0;
                     }
                 }
+                a=a.Sorting(a);
                 return is;
             }
     friend ostream& operator<<(ostream& os, NMSet& a)
@@ -265,13 +306,22 @@ public:
 
         return b;
     }
-    NMSet operator=(const NMSet& a)
+    NMSet operator=(const NMSet& a)//copy for Node
     {
-        size = a.size;
-        head = a.head;
+        if (this == NULL)
+        {
+            Node* cur = a.head;
+            for (; cur != NULL; cur = cur->next)
+                this->push_back(cur->data);
+        }
+        else
+        {
+            size = a.size;
+            head = a.head;
+        }
         return *this;
     }
-    NMSet deltaDiff(const NMSet& a) 
+    NMSet deltaDiff( NMSet& a) 
     {
         NMSet a1, b1;
         a1 = *this;
@@ -299,3 +349,4 @@ int main()
 
 
 }
+
