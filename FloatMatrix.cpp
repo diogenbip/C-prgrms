@@ -200,7 +200,7 @@ public:
         SquareMatrix b(size - 1);
         int di=0;
         int dj = 0;
-        for (int ki = 0; ki < size; ki++) {
+        for (int ki = 0; ki < size-1; ki++) {
             if (ki == i)
                 di = 1;
             dj = 0;
@@ -212,6 +212,19 @@ public:
         return b.det();
 
 
+    }
+    void Transp()
+    {
+        SquareMatrix Res(this->count_columns);
+        Res.count_strings= this->count_columns;
+        Res.count_columns =this->count_strings;
+        float s;
+        for (int i = 0; i < this->count_strings; i++)
+            for (int j = 0; j < this->count_columns; j++)
+            {
+                Res.matrix[i][j] = matrix[j][i];
+            }
+        *this = Res;
     }
     float det()
     {
@@ -244,7 +257,9 @@ int main()
 
     SquareMatrix K(3);
     cin >> K;
-    cout << K.det();
+    cout << K.det()<<endl;
+    K.Transp();
+    cout << K;
     /*cout << B << endl;
 
     A = A * B;
