@@ -79,7 +79,7 @@ public:
             matr = nullptr;
         }
     }
-    int GetEl(int i,int j)
+    T GetEl(int i,int j)
     {
         return matr[i][j];
     }
@@ -140,8 +140,8 @@ void func(Vector<T>& a, SqMat<T>& b)
 
 int main()
 {
-    Vector<int> a;
-    SqMat<int>b(3);
+    Vector<float> a;
+    SqMat<float>b(3);
     cin >> b;
     func(a, b);
     cout << a;
