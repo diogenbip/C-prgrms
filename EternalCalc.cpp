@@ -1,10 +1,5 @@
-﻿
-#define _CRT_SECURE_NO_WARNINGS 
-/*Разработать программу, имитирующую работу функционального калькулятора, который позволяет выбрать с помощью меню какую-либо из известных ему
-функций, затем предлагает ввести значение аргумента и, возможно, коэффициентов и после ввода выдает соответствующее значение функции.
-В первой версии калькулятора «база знаний» содержит две функции:
-1)экспоненту у = е^x;
-2)линейную функцию у = ах + Ь.*/
+﻿#define _CRT_SECURE_NO_WARNINGS 
+#include <iomanip> 
 #include <vector> 
 #include<iostream> 
 #include<string> 
@@ -21,15 +16,12 @@ public:
 	virtual double GetVal() const = 0;
 	virtual const std::string& GetName() const = 0;
 };
-double EXP(double x)
+double EXP(double x, float eps)
 {
-	float eps;
 	int n = 1;
 	double expf, p = 1;
-	cout << "Введите заданую точность = ";
-	cin >> eps;
 	expf = 1.0;
-	while (abs(p) >= eps)
+	while (fabs(p) >= eps)
 	{
 		p = p * x / n;
 		expf = expf + p;
@@ -43,13 +35,19 @@ class Exp : public Function
 {
 private:
 	std::string name; // мат. обозначение функции
+	float eps;
 public:
 	Exp() :name("e ^ x") {};
 	const std::string& GetName() const { return name; }
-	void SetCoeff() {};
+	void SetCoeff()
+	{
+		cout << "Enter epsilon";
+		cin >> eps;
+	};
 
-	double GetVal() const {
-		return EXP(x);
+	double GetVal() const
+	{
+		return EXP(x, eps);
 	}
 
 };
@@ -93,7 +91,7 @@ void Calculation::Operate(Function* pFunc) {
 	cout << pFunc->GetName() << endl;
 	pFunc->SetCoeff();
 	double x;
-	cout << "Enter X = "; cin >> x;
+	cout << "Enter x = "; cin >> x;
 	cin.get();
 	pFunc->SetArg(x);
 	cout << "y = " << pFunc->GetVal() << endl;
@@ -121,16 +119,17 @@ void Tabulation::Operate(Function* pF)
 	cout << "Enter x_step = ";
 	cin >> x_step;
 	cin.get();
-	cout << "__________________" << endl;
-	cout << " x\t\ty" << endl;
-	cout << "__________________" << endl;
+	cout << "_____________________" << endl;
+	cout << "x\ty\t" << endl;
+	cout << "_____________________" << endl;
 	float x = x_beg;
 	while (x <= x_end)
 	{
 		pF->SetArg(x);
-		std::cout << x << "\t\t" << pF->GetVal() << endl;
+		std::cout<< x << "\t" << pF->GetVal() << endl;
 		x += x_step;
 	}
+	cout << "___________________" << endl;
 }
 class AnyAction : public Action
 {
@@ -215,7 +214,7 @@ int main()
 	AnyAction any_action;
 	Tabulation tabulation;
 	Calculation calculation;
-	int nItem = 2;//кол-во функций в меню
+	int nItem = 3;//кол-во функций в меню
 	Function* pObjs[] = { &f_exp, &fjine };
 	vector<Function*> funcList(pObjs, pObjs + sizeof(pObjs) / sizeof(Function*));
 
@@ -228,7 +227,6 @@ int main()
 		Action* pAct = menu.SelectAction(pObj);
 		pAct->Operate(pObj);
 	}
-	cout << "Bye!\n";
 	return 0;
 	system("pause");
 
