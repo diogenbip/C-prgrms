@@ -1,4 +1,11 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS 
+/*Разработать программу, имитирующую работу функционального калькулятора, который позволяет выбрать с помощью меню какую-либо из известных ему
+функций, затем предлагает ввести значение аргумента и, возможно, коэффициентов и после ввода выдает соответствующее значение функции.
+В первой версии калькулятора «база знаний» содержит две функции:
+1)экспоненту у = е^x;
+2)линейную функцию у = ах + Ь.
+В улучшеной версии добавлена еще одна функция:
+3)многочлен Pn(x) */
 
 #include<iostream> 
 #include<string> 
@@ -32,10 +39,10 @@ float EXP(float x)
 	float eps;
 	int n = 1;
 	float expf, p = 1;
-	cout << "Введите заданую точность = ";
+	cout << "Enter epsilon ";
 	cin >> eps;
 	expf = 1.0;
-	while (abs(p) >= eps)
+	while (fabs(p) >= eps)
 	{
 		p = p * x / n;
 		expf = expf + p;
@@ -46,8 +53,8 @@ float EXP(float x)
 }
 void Exponenta::Calculate()
 {
-	cout << "Вычисление функции y = " << name << endl;
-	cout << "Введите x = ";
+	cout << "Function y = " << name << endl;
+	cout << "Enter x = ";
 	cin >> x;
 	cout << "y = " << EXP(x) << endl;
 }
@@ -56,13 +63,13 @@ class Polynom :public Function
 {
 protected:
 	float* step;
-	float* k;
+	float* koef;
 	int size;
 public:
 	Polynom()
 	{
 		step = NULL;
-		k = NULL;
+		koef = NULL;
 		size = 0;
 		name = "Pn(x)";
 	}
@@ -71,24 +78,24 @@ public:
 };
 void Polynom::Calculate()
 {
-	cout << "Введите x : ";
+	cout << "Enter x : ";
 	cin >> x;
-	cout << "Введите размер многочлена: ";
+	cout << "Enter power of the polynom ";
 	cin >> size;
-	k = new float[size];
+	koef = new float[size];
 	step = new float[size];
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i <= size; i++)
 	{
-		cout << "Введите коэффициент при x" << i << " : ";
-		cin >> k[i];
-		cout << "Введите степень при " << k[i] << "x^ : ";
-		cin >> step[i];
-		cout << endl;
+		cout << "Enter x coefficient" << i << " : ";
+		cin >> koef[i];
+		step[i] = i;
+
 	}
+	cout << endl;
 	float P = 0;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i <= size; i++)
 	{
-		P = P + k[i] * pow(x, step[i]);
+		P = P + koef[i] * pow(x, step[i]);
 	}
 	cout << "P" << size << "(x) = " << P << endl;
 }
@@ -108,7 +115,7 @@ public:
 void Line::Calculate()
 {
 	//cout « "Вычисление функции y = " « name « endl; 
-	cout << "Введите a, b, x" << endl;
+	cout << "Enter a, b, x" << endl;
 	cin >> a >> b >> x;
 	cout << "y = " << (a * x + b) << endl;
 }
@@ -143,7 +150,7 @@ public:
 	}
 	int SelectItem() const
 	{
-		cout << "Выберите пункт меню." << endl;
+		cout << "Select menu item." << endl;
 
 		int punct;
 
@@ -153,7 +160,7 @@ public:
 			if (punct > 0 && punct <= nItem)
 				return punct;
 			else
-				cout << "Ошибка. Поторите ввод." << endl;
+				cout << "Error." << endl;
 		}
 	}
 
@@ -167,7 +174,7 @@ int main()
 	/*Формируем массив адресов*/
 	Function* adrObject[] = { &f1, &f2, &f3 };
 
-	int size = sizeof(adrObject) / sizeof(Function*);
+	int size = sizeof(adrObject) / sizeof(Function*);//Или поделили бы на sizeof(adrobj[0]); //делим размерности 
 	Menu mn(size, adrObject);
 	Function* p;
 	while (p = mn.SelectObject())
