@@ -1,0 +1,4 @@
+﻿  lexical_analizator_maltseva.cpp
+D:\VSproj\lexical_analizator_maltseva\lexical_analizator_maltseva\lexical_analizator_maltseva.cpp(130,19): warning C4018: <: несоответствие типов со знаком и без знака
+D:\VSproj\lexical_analizator_maltseva\lexical_analizator_maltseva\lexical_analizator_maltseva.cpp(137,12): warning C4834: отмена возвращаемого значения функции с атрибутом "nodiscard"
+  lexical_analizator_maltseva.vcxproj -> D:\VSproj\lexical_analizator_maltseva\Debug\lexical_analizator_maltseva.exe
