@@ -1,0 +1,6 @@
+10 LET x = 4
+15 LET y=1
+20 FOR i=2 TO x
+30 LET y=y*i
+40 NEXT i
+60 END
