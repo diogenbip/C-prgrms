@@ -1,0 +1,9 @@
+dim a as int ;
+lf12 for a = 10 to 11 ; next lf13
+read a ;
+let a = 10 ;
+write 12, a ;
+<< lf12 >>
+jump lf12 ;
+rem as asdasdas ;
+trow ;
